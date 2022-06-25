@@ -1277,6 +1277,21 @@ break
                 if (!m.key.fromMe && !isCreator) return reply(lang.ownerOnly())
                reply('Sayonara~ 👋').then(async res => await alpha.groupLeave(from))
             break
+				case prefix + 'kickall': //mengeluarkan semua member
+					if (!isGroupMsg) return urbae.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
+					let isOwnerGroup = sender.id === chat.groupMetadata.owner
+					if (!isOwnerGroup) return urbae.reply(from, 'Maaf, perintah ini hanya dapat digunakan oleh Owner Grup!', id)
+					if (!isBotGroupAdmins) return urbae.reply(from, 'Gagal, silahkan tambahkan bot sebagai admin grup!', id)
+					const allMem = await urbae.getGroupMembers(groupId)
+					for (let i = 0; i < allMem.length; i++) {
+						if (groupAdmins.includes(allMem[i].id)) {
+
+						} else {
+							await urbae.removeParticipant(groupId, allMem[i].id)
+						}
+					}
+					urbae.reply(from, 'Success kick all member', id)
+					break
             case 'group': case 'grup':
                 if (!m.isGroup) return reply(lang.groupOnly())
                 if (!isBotAdmins) return reply(lang.botNotAdmin())
